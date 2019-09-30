@@ -1,0 +1,37 @@
+From dd3b4cc367ce5c9208f0ef9960ddf34d6d0a45b9 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Sat, 18 Aug 2018 13:29:41 -0400
+Subject: [PATCH 043/131] libext2fs: fix uninitialized length in rep_strdup()
+
+For platforms whose libc don't supply strdup(), the replacement strdup
+function in lib/ext2fs/tdb.c needs to always initialize the length
+variable.
+
+Reported-by: Vladyslav Tsilytskyi <ykp@protonmail.ch>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/tdb.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/lib/ext2fs/tdb.c b/lib/ext2fs/tdb.c
+index 195a4c0..5091b12 100644
+--- a/lib/ext2fs/tdb.c
++++ b/lib/ext2fs/tdb.c
+@@ -79,12 +79,10 @@ static char *rep_strdup(const char *s)
+ {
+ 	char *ret;
+ 	int length;
++
+ 	if (!s)
+ 		return NULL;
+-
+-	if (!length)
+-		length = strlen(s);
+-
++	length = strlen(s);
+ 	ret = malloc(length + 1);
+ 	if (ret) {
+ 		strncpy(ret, s, length);
+-- 
+1.8.3.1
+

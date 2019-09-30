@@ -1,0 +1,39 @@
+From 21dde7ba356a26f10b9b6153069b26dfb0b97e41 Mon Sep 17 00:00:00 2001
+From: Lukas Czerner <lczerner@redhat.com>
+Date: Mon, 11 Feb 2019 12:00:10 -0500
+Subject: [PATCH 133/202] create_inode: fix potential memory leak in
+ path_append()
+
+If realloc() fails in path_append() we will lose a memory pointed to by
+target->path.  Fix it.
+
+path_append() is used by mke2fs and e2fsdroid.
+
+Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ misc/create_inode.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/misc/create_inode.c b/misc/create_inode.c
+index 1b35c76..aa865a4 100644
+--- a/misc/create_inode.c
++++ b/misc/create_inode.c
+@@ -704,10 +704,12 @@ struct file_info {
+ static errcode_t path_append(struct file_info *target, const char *file)
+ {
+ 	if (strlen(file) + target->path_len + 1 > target->path_max_len) {
++		void *p;
+ 		target->path_max_len *= 2;
+-		target->path = realloc(target->path, target->path_max_len);
+-		if (!target->path)
++		p = realloc(target->path, target->path_max_len);
++		if (p == NULL)
+ 			return EXT2_ET_NO_MEMORY;
++		target->path = p;
+ 	}
+ 	target->path_len += sprintf(target->path + target->path_len, "/%s",
+ 				    file);
+-- 
+2.7.4
+

@@ -1,0 +1,44 @@
+diff -Npur e2fsprogs-1.44.4/tests/m_hugefile/expect e2fsprogs-1.44.4-hzq/tests/m_hugefile/expect
+--- e2fsprogs-1.44.4/tests/m_hugefile/expect	2018-08-19 10:26:58.000000000 +0800
++++ e2fsprogs-1.44.4-hzq/tests/m_hugefile/expect	2018-11-30 06:04:12.000000000 +0800
+@@ -1,19 +1,19 @@
+-mke2fs -F -T hugefile test.img 4T
+-Creating filesystem with 1073741824 4k blocks and 1048576 inodes
++mke2fs -F -T hugefile test.img 1T
++Creating filesystem with 268435456 4k blocks and 262144 inodes
+ Superblock backups stored on blocks: 
+ 
+ Allocating group tables: done                            
+-Writing inode tables:            done                            
++Writing inode tables:          done                            
+ Creating 1 huge file(s) : done
+-Writing superblocks and filesystem accounting information:            done
++Writing superblocks and filesystem accounting information:          done
+ 
+ Pass 1: Checking inodes, blocks, and sizes
+ Pass 2: Checking directory structure
+ Pass 3: Checking directory connectivity
+ Pass 4: Checking reference counts
+ Pass 5: Checking group summary information
+-test_filesys: 13/1048576 files (0.0% non-contiguous), 1073709417/1073741824 blocks
++test_filesys: 13/262144 files (0.0% non-contiguous), 268394593/268435456 blocks
+ Exit status is 0
+ debugfs -R "extents /store/big-data" test.img
+-Last logical block: 1073610751
+-Last physical block: 1073741823
++Last logical block: 268369919
++Last physical block: 268435455
+diff -Npur e2fsprogs-1.44.4/tests/m_hugefile/script e2fsprogs-1.44.4-hzq/tests/m_hugefile/script
+--- e2fsprogs-1.44.4/tests/m_hugefile/script	2018-08-19 10:26:58.000000000 +0800
++++ e2fsprogs-1.44.4-hzq/tests/m_hugefile/script	2018-11-30 05:52:17.000000000 +0800
+@@ -35,8 +35,8 @@ cat > $CONF << ENDL
+ 	}
+ ENDL
+ 
+-echo "mke2fs -F -T hugefile test.img 4T" > $OUT
+-MKE2FS_CONFIG=$CONF $MKE2FS -F -T hugefile $TMPFILE 4T >> $OUT 2>&1
++echo "mke2fs -F -T hugefile test.img 1T" > $OUT
++MKE2FS_CONFIG=$CONF $MKE2FS -F -T hugefile $TMPFILE 1T >> $OUT 2>&1
+ rm -f $CONF
+ 
+ # check the file system if we get this far, we succeeded...
