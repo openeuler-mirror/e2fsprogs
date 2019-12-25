@@ -3,7 +3,7 @@ Version:        1.44.3
 Release:        7
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
-Url:            http://e2fsprogs.sourceforge.net/
+URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 Patch6000:      6000-blkid-avoid-FPE-crash-when-probing-a-HFS-superblock-.patch
 Patch6001:      6001-AOSP-e2fsdroid-Fix-crash-with-invalid-command-line-a.patch
