@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.44.3
-Release:        7
+Release:        8
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -17,7 +17,7 @@ Patch6008:      6008-create_inode-fix-potential-memory-leak-in-path_appen.patch
 Patch6009:      6009-mke2fs-fix-check-for-absurdly-large-devices.patch
 Patch9000:      9000-mke2fs-check.patch
 
-BuildRequires:  gcc git pkgconfig texinfo multilib-rpm-config
+BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
 
 Provides:       e2fsprogs-libs%{?_isa} e2fsprogs-libs
@@ -73,7 +73,6 @@ This packages includes man files for e2fsprogs.
 %install
 make install install-libs DESTDIR=%{buildroot} INSTALL="%{__install} -p" \
     root_sbindir=%{_sbindir} root_libdir=%{_libdir}
-%multilib_fix_c_header --file %{_includedir}/ext2fs/ext2_types.h
 chmod +w %{buildroot}%{_libdir}/*.a
 
 %find_lang %{name}
@@ -128,6 +127,12 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.44.3-8
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:update spec.
+
 * Wed Sep 18 2019 luoshijie <luoshijie1@huawei.com> - 1.44.3-7
 - Type:bugfix
 - ID:NA
