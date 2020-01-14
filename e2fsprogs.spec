@@ -1,11 +1,12 @@
 Name:           e2fsprogs
 Version:        1.45.3
-Release:        0
+Release:        1
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 
+Patch6000:      6000-e2fsck-abort-if-there-is-a-corrupted-directory-block.patch 
 Patch9000:      9000-mke2fs-check.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
@@ -123,6 +124,12 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Mon Jan 14 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.45.3-1
+- Type:cves
+- ID:CVE-2019-5188
+- SUG:restart
+- DESC:backport patch to fix CVE-2019-5188.
+
 * Mon Jan 14 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.45.3-0
 - Type:enhancement
 - ID:NA
