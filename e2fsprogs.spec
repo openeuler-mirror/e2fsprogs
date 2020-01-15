@@ -1,20 +1,12 @@
 Name:           e2fsprogs
-Version:        1.44.3
-Release:        8
+Version:        1.45.3
+Release:        1
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
-Patch6000:      6000-blkid-avoid-FPE-crash-when-probing-a-HFS-superblock-.patch
-Patch6001:      6001-AOSP-e2fsdroid-Fix-crash-with-invalid-command-line-a.patch
-Patch6002:      6002-e2fsck-fix-fd-leak-in-reserve_stdio_fds.patch
-Patch6003:      6003-libext2fs-fix-uninitialized-length-in-rep_strdup.patch
-Patch6004:      6004-tune2fs-fix-dereference-of-freed-memory-after-journa.patch
-Patch6005:      6005-libe2p-avoid-segfault-when-s_nr_users-is-too-high.patch
-Patch6006:      6006-e2freefrag-fix-free-blocks-count-during-live-scan.patch
-Patch6007:      6007-e2freefrag-fix-memory-leak-in-scan_online.patch
-Patch6008:      6008-create_inode-fix-potential-memory-leak-in-path_appen.patch
-Patch6009:      6009-mke2fs-fix-check-for-absurdly-large-devices.patch
+
+Patch6000:      6000-e2fsck-abort-if-there-is-a-corrupted-directory-block.patch 
 Patch9000:      9000-mke2fs-check.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
@@ -97,13 +89,18 @@ exit 0
 %doc README RELEASE-NOTES
 %license NOTICE
 %config(noreplace) /etc/mke2fs.conf
+%config(noreplace) /etc/e2scrub.conf
 %{_bindir}/chattr
+%{_bindir}/fuse2fs
 %{_bindir}/lsattr
+%{_libdir}/e2fsprogs/e2scrub_fail
 %{_libdir}/libe2p.so.*
 %{_libdir}/libext2fs.so.*
 %{_libdir}/libcom_err.so.*
 %{_libdir}/libss.so.*
 %{_sbindir}/*
+%{_udevrulesdir}/*.rules
+%{_unitdir}/e2scrub*
 
 %files devel
 %{_bindir}/compile_et
@@ -127,6 +124,18 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Mon Jan 14 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.45.3-1
+- Type:cves
+- ID:CVE-2019-5188
+- SUG:restart
+- DESC:backport patch to fix CVE-2019-5188.
+
+* Mon Jan 14 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.45.3-0
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:update package from 1.44.3 to 1.45.3.
+
 * Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.44.3-8
 - Type:enhancement
 - ID:NA
