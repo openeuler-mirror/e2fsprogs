@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.3
-Release:        1
+Release:        2
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -69,6 +69,9 @@ chmod +w %{buildroot}%{_libdir}/*.a
 
 %find_lang %{name}
 
+rm -f %{buildroot}/etc/cron.d/e2scrub_all
+rm -f %{buildroot}%{_libdir}/e2scrub_all_cron
+
 %check
 make fullcheck
 
@@ -124,6 +127,12 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Wed Jan 22 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.45.3-2
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:fix local rpmbuild error.
+
 * Mon Jan 14 2020 openEuler Buildteam <buildteam@openeuler.org> - 1.45.3-1
 - Type:cves
 - ID:CVE-2019-5188
