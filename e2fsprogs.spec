@@ -1,14 +1,13 @@
 Name:           e2fsprogs
-Version:        1.45.3
-Release:        4
+Version:        1.45.6
+Release:        0
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 
-Patch6000:      6000-e2fsck-abort-if-there-is-a-corrupted-directory-block.patch
-Patch6001:      6001-libsupport-add-checks-to-prevent-buffer-overrun-bugs.patch 
 Patch9000:      9000-mke2fs-check.patch
+Patch9001:      9001-add-device-check-in-ismount-process.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
@@ -90,7 +89,7 @@ fi
 exit 0
 
 %files -f %{name}.lang
-%doc README RELEASE-NOTES
+%doc README
 %license NOTICE
 %config(noreplace) /etc/mke2fs.conf
 %config(noreplace) /etc/e2scrub.conf
@@ -128,6 +127,26 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Fri Apr 17 2020 luoshijie <luoshijie1@huawei.com> - 1.45.6-0
+- Type:enhancement
+- ID:NA
+- SUG:restart
+- DESC:update package to 1.45.6.
+
+* Thu Mar 5 2020 luoshijie <luoshijie1@huawei.com> - 1.45.3-6
+- Type:bugfix
+- ID:NA
+- SUG:restart
+- DESC:remove soft link RELEASE-NOTES from rpm, because this one
+       is no need to be packaged.
+
+* Fri Feb 28 2020 luoshijie <luoshijie1@huawei.com> - 1.45.3-5
+- Type:bugfix
+- ID:NA
+- SUG:restart
+- DESC:sync bugfix patch from next.
+       add device check in ismount process.
+
 * Mon Feb 3 2020 luoshijie <luoshijie1@huawei.com> - 1.45.3-4
 - Type:cves
 - ID:CVE-2019-5094
