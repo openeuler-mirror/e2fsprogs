@@ -6,9 +6,9 @@ License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 
-Patch0000:      0000-e2fsck-abort-if-there-is-a-corrupted-directory-block.patch
-Patch0001:      0001-libsupport-add-checks-to-prevent-buffer-overrun-bugs.patch 
-Patch0002:      0002-mke2fs-check.patch
+Patch0:      0000-e2fsck-abort-if-there-is-a-corrupted-directory-block.patch
+Patch1:      0001-libsupport-add-checks-to-prevent-buffer-overrun-bugs.patch 
+Patch2:      0002-mke2fs-check.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
