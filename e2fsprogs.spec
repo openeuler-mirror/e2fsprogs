@@ -1,14 +1,12 @@
 Name:           e2fsprogs
-Version:        1.45.3
-Release:        5
+Version:        1.45.6
+Release:        1
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 
-Patch0:      0000-e2fsck-abort-if-there-is-a-corrupted-directory-block.patch
-Patch1:      0001-libsupport-add-checks-to-prevent-buffer-overrun-bugs.patch 
-Patch2:      0002-mke2fs-check.patch
+Patch1:      0001-e2fsprogs-set-hugefile-from-4T-to-1T-in-hugefile-tes.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
@@ -128,6 +126,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Wed Jul 15 2020 Zhiqiang Liu <lzhq28@mail.ustc.edu.cn> - 1.45.6-1
+- rebuild package
+
 * Wed Jul 1 2020 Wu Bo <wubo009@163.com> - 1.45.3-5
 - rebuild package
 
