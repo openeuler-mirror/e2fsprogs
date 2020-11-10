@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        0
+Release:        1
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -11,6 +11,7 @@ Patch9001:      9001-add-device-check-in-ismount-process.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
+Requires:       %{name}-help = %{version}-%{release}
 
 Provides:       e2fsprogs-libs%{?_isa} e2fsprogs-libs
 Obsoletes:      e2fsprogs-libs
@@ -127,6 +128,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Tue Nov 10 2020 lixiaokeng <lixiaokeng@huawei.com> - 1.45.6-1
+- Set help package as install require
+
 * Fri Apr 17 2020 luoshijie <luoshijie1@huawei.com> - 1.45.6-0
 - Type:enhancement
 - ID:NA
