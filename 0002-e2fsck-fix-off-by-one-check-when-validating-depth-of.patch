@@ -1,0 +1,29 @@
+From 2f6fd5da81a78aa45d750d8248b25171b8ad9dcd Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Fri, 10 Apr 2020 00:30:52 -0400
+Subject: [PATCH 13/26] e2fsck: fix off-by-one check when validating depth of
+ an htree
+
+Fixes: 3f0cf6475399 ("e2fsprogs: add support for 3-level htree")
+
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ e2fsck/pass1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/e2fsck/pass1.c b/e2fsck/pass1.c
+index c9e8bf8..38afda4 100644
+--- a/e2fsck/pass1.c
++++ b/e2fsck/pass1.c
+@@ -2685,7 +2685,7 @@ static int handle_htree(e2fsck_t ctx, struct problem_context *pctx,
+ 		return 1;
+ 
+ 	pctx->num = root->indirect_levels;
+-	if ((root->indirect_levels > ext2_dir_htree_level(fs)) &&
++	if ((root->indirect_levels >= ext2_dir_htree_level(fs)) &&
+ 	    fix_problem(ctx, PR_1_HTREE_DEPTH, pctx))
+ 		return 1;
+ 
+-- 
+1.8.3.1
+
