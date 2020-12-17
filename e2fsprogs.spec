@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        2
+Release:        3
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -9,9 +9,11 @@ Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{
 Patch1:      0001-e2fsprogs-set-hugefile-from-4T-to-1T-in-hugefile-tes.patch
 Patch2:      0002-e2fsck-fix-off-by-one-check-when-validating-depth-of.patch
 Patch3:      0003-mke2fs-fix-up-check-for-hardlinks-always-false-if-in.patch
+Patch4:      0004-add-device-check-in-ismount-process.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
+Recommends:	%{name}-help = %{version}-%{release}
 
 Provides:       e2fsprogs-libs%{?_isa} e2fsprogs-libs
 Obsoletes:      e2fsprogs-libs
@@ -128,6 +130,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Wed Dec 16 2020 yanglongkang <yanglongkang@huawei.com> - 1.45.6-3
+- Set help package as install require
+
 * Fri Oct 30 2020 Zhiqiang Liu <lzhq28@mail.ustc.edu.cn> - 1.45.6-2
 - backport upstream patches-epoch2 to fix some problems
 
