@@ -1,0 +1,75 @@
+From 86d6153417ddaccbe3d1f4466a374716006581f4 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Sat, 25 Apr 2020 11:41:24 -0400
+Subject: [PATCH] libext2fs: batch calls to ext2fs_zero_blocks2()
+
+When allocating blocks for an indirect block mapped file, accumulate
+blocks to be zero'ed and then call ext2fs_zero_blocks2() to zero them
+in large chunks instead of block by block.
+
+This significantly speeds up mkfs.ext3 since we don't send a large
+number of ZERO_RANGE requests to the kernel, and while the kernel does
+batch write requests, it is not batching ZERO_RANGE requests.  It's
+more efficient to batch in userspace in any case, since it avoids
+unnecessary system calls.
+
+Reported-by: Mario Schuknecht <mario.schuknecht@dresearch-fe.de>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/fallocate.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/lib/ext2fs/fallocate.c b/lib/ext2fs/fallocate.c
+index 31e47f8d..5cde7d5c 100644
+--- a/lib/ext2fs/fallocate.c
++++ b/lib/ext2fs/fallocate.c
+@@ -805,7 +805,8 @@ errcode_t ext2fs_fallocate(ext2_filsys fs, int flags, ext2_ino_t ino,
+ 			   blk64_t start, blk64_t len)
+ {
+ 	struct ext2_inode	inode_buf;
+-	blk64_t			blk, x;
++	blk64_t			blk, x, zero_blk, last = 0;
++	int			zero_len = 0;
+ 	errcode_t		err;
+ 
+ 	if (((flags & EXT2_FALLOCATE_FORCE_INIT) &&
+@@ -841,15 +842,32 @@ errcode_t ext2fs_fallocate(ext2_filsys fs, int flags, ext2_ino_t ino,
+ 		if (x)
+ 			continue;
+ 
+-		err = ext2fs_bmap2(fs, ino, inode, NULL,
+-				   BMAP_ALLOC | BMAP_UNINIT | BMAP_ZERO, blk,
+-				   0, &x);
++		err = ext2fs_bmap2(fs, ino, inode, NULL, BMAP_ALLOC,
++				   blk, 0, &x);
+ 		if (err)
+-			return err;
++			goto errout;
++		if ((zero_len && (x != last+1)) ||
++		    (zero_len >= 65536)) {
++			err = ext2fs_zero_blocks2(fs, zero_blk, zero_len,
++						  NULL, NULL);
++			zero_len = 0;
++			if (err)
++				goto errout;
++		}
++		if (zero_len == 0) {
++			zero_blk = x;
++			zero_len = 1;
++		} else {
++			zero_len++;
++		}
++		last = x;
+ 	}
+ 
+ out:
+ 	if (inode == &inode_buf)
+ 		ext2fs_write_inode(fs, ino, inode);
++errout:
++	if (zero_len)
++		ext2fs_zero_blocks2(fs, zero_blk, zero_len, NULL, NULL);
+ 	return err;
+ }
+-- 
+2.23.0
+
