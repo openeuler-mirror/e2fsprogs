@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        3
+Release:        4
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -10,6 +10,7 @@ Patch1:      0001-e2fsprogs-set-hugefile-from-4T-to-1T-in-hugefile-tes.patch
 Patch2:      0002-e2fsck-fix-off-by-one-check-when-validating-depth-of.patch
 Patch3:      0003-mke2fs-fix-up-check-for-hardlinks-always-false-if-in.patch
 Patch4:      0004-add-device-check-in-ismount-process.patch
+Patch5:      0005-libext2fs-batch-calls-to-ext2fs_zero_blocks2.patch
 
 BuildRequires:  gcc git pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
@@ -130,6 +131,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Tue Mar 23 2021 Haotian Li <lihaotian9@huawei.com> - 1.45.6-4
+- backport upstream to speed up mkfs.ext3
+
 * Wed Dec 16 2020 yanglongkang <yanglongkang@huawei.com> - 1.45.6-3
 - Set help package as install require
 
