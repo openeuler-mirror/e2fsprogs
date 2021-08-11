@@ -1,8 +1,8 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        1
+Release:        4
 Summary:        Second extended file system management tools
-License:        GPLv2 and LGPLv2 and MIT
+License:        GPLv2 and LGPLv2 and GPLv2+
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 
@@ -11,7 +11,7 @@ Patch2:      0002-e2fsck-fix-off-by-one-check-when-validating-depth-of.patch
 Patch3:      0003-mke2fs-fix-up-check-for-hardlinks-always-false-if-in.patch
 Patch4:      0004-add-device-check-in-ismount-process.patch
 
-BuildRequires:  gcc git pkgconfig texinfo
+BuildRequires:  gcc pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
 Recommends:	%{name}-help = %{version}-%{release}
 
@@ -55,7 +55,7 @@ BuildArch: noarch
 This packages includes man files for e2fsprogs.
 
 %prep
-%autosetup -n %{name}-%{version} -p1 -Sgit
+%autosetup -n %{name}-%{version} -p1
 
 
 %build
@@ -130,6 +130,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Thu Aug 5 2021 wuguanghao<wuguanghao3@huawei.com> - 1.45.6-4
+- DESC: delete -Sgit from %autosetup, and delete BuildRequire git  
+
 * Wed Dec 16 2020 yanglongkang <yanglongkang@huawei.com> - 1.45.6-1
 - Set help package as install require
   backport upstream patches-epoch2 to fix some problems
