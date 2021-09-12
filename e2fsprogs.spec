@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        5
+Release:        6
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and GPLv2+
 URL:            http://e2fsprogs.sourceforge.net/
@@ -10,6 +10,7 @@ Patch1:      0001-e2fsprogs-set-hugefile-from-4T-to-1T-in-hugefile-tes.patch
 Patch2:      0002-e2fsck-fix-off-by-one-check-when-validating-depth-of.patch
 Patch3:      0003-mke2fs-fix-up-check-for-hardlinks-always-false-if-in.patch
 Patch4:      0004-add-device-check-in-ismount-process.patch
+Patch5:      0005-libss-add-newer-libreadline.so.8-to-dlopen-path.patch
 
 BuildRequires:  gcc pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
@@ -131,6 +132,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Sun Sep 13 2021 lixiaokeng <lixiaokeng@huawei.com> - 1.45.6-6
+- DESC: add newer libreadline.so.8 to dlopen path
+
 * Fri Aug 20 2021 chenyanpanHW <chenyanpan@huawei.com> - 1.45.6-5
 - DESC: add necessary BuildRequires audit
 
