@@ -1,0 +1,30 @@
+From 28e22540e24fd2a70b8adf805fad4961f5234d21 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Sat, 13 Feb 2021 10:35:50 -0500
+Subject: [PATCH] debugfs: fix logdump on file systems with block sizes > 8192
+
+Conflict: delete blocksize EXT2_MAX_BLOCK_SIZE compare 
+
+Addresses-Coverity-Bug: 1472879
+Addresses-Coverity-Bug: 1472880
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ debugfs/logdump.c | 4 ++--
+ 1 file changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/debugfs/logdump.c b/debugfs/logdump.c
+index 5d3f3d9a..6826b250 100644
+--- a/debugfs/logdump.c
++++ b/debugfs/logdump.c
+@@ -350,7 +350,7 @@ static void dump_journal(char *cmdname, FILE *out_file,
+ {
+ 	struct ext2_super_block *sb;
+ 	char			jsb_buffer[1024];
+-	char			buf[8192];
++	char			buf[EXT2_MAX_BLOCK_SIZE];
+ 	journal_superblock_t	*jsb;
+ 	unsigned int		blocksize = 1024;
+ 	int			retval;
+-- 
+2.25.1
+
