@@ -1,0 +1,27 @@
+From fb874e6ff42bee3ee327afc2651483b83311b445 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Thu, 11 Feb 2021 10:45:13 -0500
+Subject: [PATCH] mke2fs: fix resource leak on error path when creating inodes
+
+Addresses-Coverity-Bug: 1472856
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ misc/create_inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/misc/create_inode.c b/misc/create_inode.c
+index 194b06a2..67bf94cf 100644
+--- a/misc/create_inode.c
++++ b/misc/create_inode.c
+@@ -170,7 +170,7 @@ static errcode_t set_inode_xattr(ext2_filsys fs, ext2_ino_t ino,
+ 	if (retval) {
+ 		com_err(__func__, retval,
+ 			_("while reading xattrs for inode %u"), ino);
+-		return retval;
++		goto out;
+ 	}
+ 
+ 	retval = ext2fs_get_mem(size, &list);
+-- 
+2.25.1
+

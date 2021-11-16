@@ -1,0 +1,46 @@
+From feccf49871de4b05f9d99aca2df578947be98188 Mon Sep 17 00:00:00 2001
+From: Wu Guanghao <wuguanghao3@huawei.com>
+Date: Wed, 28 Jul 2021 09:56:45 +0800
+Subject: [PATCH] ss_add_info_dir: fix error handling when memory allocation
+ fails
+
+If the realloc() and malloc() calls fail, avoid a memory leak as well
+as a potential seg fault.
+
+[ Fix error code setting to avoid depending on malloc() and realloc()
+  setting errno. -- TYT ]
+
+Signed-off-by: Wu Guanghao <wuguanghao3@huawei.com>
+Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Reviewed-by: Wu Bo <wubo40@huawei.com>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ss/help.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/lib/ss/help.c b/lib/ss/help.c
+index 5204401b..96eb1092 100644
+--- a/lib/ss/help.c
++++ b/lib/ss/help.c
+@@ -148,13 +148,16 @@ void ss_add_info_dir(int sci_idx, char *info_dir, int *code_ptr)
+     dirs = (char **)realloc((char *)dirs,
+ 			    (unsigned)(n_dirs + 2)*sizeof(char *));
+     if (dirs == (char **)NULL) {
+-	info->info_dirs = (char **)NULL;
+-	*code_ptr = errno;
++	*code_ptr = ENOMEM;
+ 	return;
+     }
+     info->info_dirs = dirs;
+     dirs[n_dirs + 1] = (char *)NULL;
+     dirs[n_dirs] = malloc((unsigned)strlen(info_dir)+1);
++    if (dirs[n_dirs] == (char *)NULL) {
++        *code_ptr = ENOMEM;
++        return;
++    }
+     strcpy(dirs[n_dirs], info_dir);
+     *code_ptr = 0;
+ }
+-- 
+2.25.1
+
