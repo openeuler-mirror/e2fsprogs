@@ -1,0 +1,38 @@
+From 794983ac1a98abd5124407a86f929fb5ea9acd07 Mon Sep 17 00:00:00 2001
+From: Lukas Czerner <lczerner@redhat.com>
+Date: Fri, 6 Aug 2021 11:58:16 +0200
+Subject: [PATCH] libext2fs: fix unexpected NULL variable
+
+The ext2fs_check_mount_point() function can be called with mtpt being
+NULL as for example from ext2fs_check_if_mounted(). However in the
+is_swap_device condition we use the mtpt in strncpy without checking
+whether it is non-null first.
+
+This should not be a problem on linux since the previous attempt to open
+the device exclusively would have prevented us from ever reaching the
+problematic strncpy. However it's still a bug and can cause problems on
+other systems, fix it by conditioning strncpy on mtpt not being null.
+
+Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/ismounted.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/ext2fs/ismounted.c b/lib/ext2fs/ismounted.c
+index c9e6a9d0..aee7d726 100644
+--- a/lib/ext2fs/ismounted.c
++++ b/lib/ext2fs/ismounted.c
+@@ -393,7 +393,8 @@ errcode_t ext2fs_check_mount_point(const char *device, int *mount_flags,
+ 
+ 	if (is_swap_device(device)) {
+ 		*mount_flags = EXT2_MF_MOUNTED | EXT2_MF_SWAP;
+-		strncpy(mtpt, "<swap>", mtlen);
++		if (mtpt)
++			strncpy(mtpt, "<swap>", mtlen);
+ 	} else {
+ #ifdef HAVE_SETMNTENT
+ 		retval = check_mntent(device, mount_flags, mtpt, mtlen);
+-- 
+2.25.1
+

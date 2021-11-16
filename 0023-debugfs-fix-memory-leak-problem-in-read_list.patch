@@ -1,0 +1,44 @@
+From 989a4189698c4efa53b521b6ad8236bbfc3452c3 Mon Sep 17 00:00:00 2001
+From: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Date: Sat, 20 Feb 2021 16:41:29 +0800
+Subject: [PATCH] debugfs: fix memory leak problem in read_list()
+
+In read_list func, if strtoull() fails in while loop,
+we will return the error code directly. Then, memory of
+variable lst will be leaked without setting to *list.
+
+Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Signed-off-by: linfeilong <linfeilong@huawei.com>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ debugfs/util.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/debugfs/util.c b/debugfs/util.c
+index be6b550e..9e880548 100644
+--- a/debugfs/util.c
++++ b/debugfs/util.c
+@@ -530,12 +530,16 @@ errcode_t read_list(char *str, blk64_t **list, size_t *len)
+ 
+ 		errno = 0;
+ 		y = x = strtoull(tok, &e, 0);
+-		if (errno)
+-			return errno;
++		if (errno) {
++			retval = errno;
++			break;
++		}
+ 		if (*e == '-') {
+ 			y = strtoull(e + 1, NULL, 0);
+-			if (errno)
+-				return errno;
++			if (errno) {
++				retval = errno;
++				break;
++			}
+ 		} else if (*e != 0) {
+ 			retval = EINVAL;
+ 			break;
+-- 
+2.25.1
+
