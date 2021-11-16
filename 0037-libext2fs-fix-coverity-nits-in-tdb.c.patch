@@ -1,0 +1,55 @@
+From 95954ac7b4bb0ffb6dffa101ef6d575ff228dd1a Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Tue, 10 Aug 2021 14:52:15 -0400
+Subject: [PATCH] libext2fs: fix coverity nits in tdb.c
+
+Address unchecked returned value and a string not null terminated warnings.
+
+Addresses-Coverity-Bug: 709473
+Addresses-Coverity-Bug: 709474
+Addresses-Coverity-Bug: 1464578
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/tdb.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/lib/ext2fs/tdb.c b/lib/ext2fs/tdb.c
+index dc5c0ff6..b07b2917 100644
+--- a/lib/ext2fs/tdb.c
++++ b/lib/ext2fs/tdb.c
+@@ -3089,9 +3089,10 @@ void tdb_increment_seqnum_nonblock(struct tdb_context *tdb)
+ 	/* we ignore errors from this, as we have no sane way of
+ 	   dealing with them.
+ 	*/
+-	tdb_ofs_read(tdb, TDB_SEQNUM_OFS, &seqnum);
++	if (tdb_ofs_read(tdb, TDB_SEQNUM_OFS, &seqnum) == -1)
++		return;
+ 	seqnum++;
+-	tdb_ofs_write(tdb, TDB_SEQNUM_OFS, &seqnum);
++	(void) tdb_ofs_write(tdb, TDB_SEQNUM_OFS, &seqnum);
+ }
+ 
+ /*
+@@ -3692,7 +3693,8 @@ int tdb_get_seqnum(struct tdb_context *tdb)
+ {
+ 	tdb_off_t seqnum=0;
+ 
+-	tdb_ofs_read(tdb, TDB_SEQNUM_OFS, &seqnum);
++	if (tdb_ofs_read(tdb, TDB_SEQNUM_OFS, &seqnum) == -1)
++		return 0;
+ 	return seqnum;
+ }
+ 
+@@ -3914,7 +3916,8 @@ struct tdb_context *tdb_open_ex(const char *name, int hash_size, int tdb_flags,
+ 	}
+ 
+ 	if (read(tdb->fd, &tdb->header, sizeof(tdb->header)) != sizeof(tdb->header)
+-	    || strcmp(tdb->header.magic_food, TDB_MAGIC_FOOD) != 0
++	    || memcmp(tdb->header.magic_food, TDB_MAGIC_FOOD,
++		      sizeof(TDB_MAGIC_FOOD)) != 0
+ 	    || (tdb->header.version != TDB_VERSION
+ 		&& !(rev = (tdb->header.version==TDB_BYTEREV(TDB_VERSION))))) {
+ 		/* its not a valid database - possibly initialise it */
+-- 
+2.25.1
+

@@ -1,0 +1,28 @@
+From 1b25ea248c2335d39968b770a95dda4eae6b6fa4 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Fri, 12 Feb 2021 15:10:11 -0500
+Subject: [PATCH] libext2fs: fix incorrect error code return in
+ ext2fs_add_jounral_inode3()
+
+Addresses-Coverity-Bug: 1472255
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/mkjournal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/ext2fs/mkjournal.c b/lib/ext2fs/mkjournal.c
+index 732ba7d6..bc8c57bf 100644
+--- a/lib/ext2fs/mkjournal.c
++++ b/lib/ext2fs/mkjournal.c
+@@ -524,7 +524,7 @@ errcode_t ext2fs_add_journal_inode3(ext2_filsys fs, struct ext2fs_journal_params
+ 			retval = ioctl(fd, EXT2_IOC_SETFLAGS, &f);
+ 			close(fd);
+ 			if (retval)
+-				return retval;
++				return errno;
+ 		}
+ #endif
+ #endif
+-- 
+2.25.1
+
