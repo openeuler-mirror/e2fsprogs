@@ -1,0 +1,50 @@
+From dd2ed58ab1873304ba2e7d0a0e49ec87981aafc7 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Thu, 21 Jan 2021 16:00:01 -0500
+Subject: [PATCH] libext2fs: fix incorrect negative error return in unix and
+ sparse io managers
+
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/sparse_io.c | 4 ++--
+ lib/ext2fs/unix_io.c   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lib/ext2fs/sparse_io.c b/lib/ext2fs/sparse_io.c
+index 5e0e2cd9..f287e76d 100644
+--- a/lib/ext2fs/sparse_io.c
++++ b/lib/ext2fs/sparse_io.c
+@@ -138,7 +138,7 @@ static errcode_t io_manager_configure(struct sparse_io_params *params,
+ 	retval = io_manager_import_sparse(params, sm, io);
+ 	if (retval) {
+ 		if (!params->block_size || !params->blocks_count) {
+-			retval = -EINVAL;
++			retval = EINVAL;
+ 			goto err_params;
+ 		}
+ 		sm->block_size = params->block_size;
+@@ -229,7 +229,7 @@ static errcode_t read_sparse_argv(const char *name, bool is_fd,
+ 
+ 	if (ret < 1) {
+ 		free(sparse_params->file);
+-		return -EINVAL;
++		return EINVAL;
+ 	}
+ 	return 0;
+ }
+diff --git a/lib/ext2fs/unix_io.c b/lib/ext2fs/unix_io.c
+index 628e60c3..2bcd435c 100644
+--- a/lib/ext2fs/unix_io.c
++++ b/lib/ext2fs/unix_io.c
+@@ -733,7 +733,7 @@ static errcode_t unixfd_open(const char *str_fd, int flags,
+ #if defined(HAVE_FCNTL)
+ 	fd_flags = fcntl(fd, F_GETFD);
+ 	if (fd_flags == -1)
+-		return -EBADF;
++		return EBADF;
+ 
+ 	flags = 0;
+ 	if (fd_flags & O_RDWR)
+-- 
+2.25.1
+

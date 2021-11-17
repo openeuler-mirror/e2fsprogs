@@ -1,0 +1,50 @@
+From 37c2008f1356ba64132514346c1916f7ecc83ddb Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Thu, 25 Feb 2021 17:26:07 -0500
+Subject: [PATCH] debugfs: fix rdump and ls to handle uids and gids > 65536
+ correctly
+
+https://github.com/tytso/e2fsprogs/issues/63
+
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ debugfs/dump.c | 6 +++---
+ debugfs/ls.c   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/debugfs/dump.c b/debugfs/dump.c
+index fdd66198..42f5204a 100644
+--- a/debugfs/dump.c
++++ b/debugfs/dump.c
+@@ -81,12 +81,12 @@ static void fix_perms(const char *cmd, const struct ext2_inode *inode,
+ 		com_err(cmd, errno, "while setting permissions of %s", name);
+ 
+ #ifndef HAVE_FCHOWN
+-	i = chown(name, inode->i_uid, inode->i_gid);
++	i = chown(name, inode_uid(*inode), inode_gid(*inode));
+ #else
+ 	if (fd != -1)
+-		i = fchown(fd, inode->i_uid, inode->i_gid);
++		i = fchown(fd, inode_uid(*inode), inode_gid(*inode));
+ 	else
+-		i = chown(name, inode->i_uid, inode->i_gid);
++		i = chown(name, inode_uid(*inode), inode_gid(*inode));
+ #endif
+ 	if (i == -1)
+ 		com_err(cmd, errno, "while changing ownership of %s", name);
+diff --git a/debugfs/ls.c b/debugfs/ls.c
+index fae2a653..525f084b 100644
+--- a/debugfs/ls.c
++++ b/debugfs/ls.c
+@@ -114,7 +114,7 @@ static int list_dir_proc(ext2_ino_t dir EXT2FS_ATTR((unused)),
+ 		} else
+ 			memset(&inode, 0, sizeof(struct ext2_inode));
+ 		fprintf(ls->f,"/%u/%06o/%d/%d/%.*s/", ino, inode.i_mode,
+-			inode.i_uid, inode.i_gid, thislen, dirent->name);
++			inode_uid(inode), inode_gid(inode), thislen, dirent->name);
+ 		if (LINUX_S_ISDIR(inode.i_mode))
+ 			fprintf(ls->f, "/");
+ 		else
+-- 
+2.25.1
+
