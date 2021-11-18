@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        4
+Release:        7
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and GPLv2+
 URL:            http://e2fsprogs.sourceforge.net/
@@ -10,10 +10,45 @@ Patch1:      0001-e2fsprogs-set-hugefile-from-4T-to-1T-in-hugefile-tes.patch
 Patch2:      0002-e2fsck-fix-off-by-one-check-when-validating-depth-of.patch
 Patch3:      0003-mke2fs-fix-up-check-for-hardlinks-always-false-if-in.patch
 Patch4:      0004-add-device-check-in-ismount-process.patch
+Patch5:      0005-libss-add-newer-libreadline.so.8-to-dlopen-path.patch
+
+Patch6:		0006-e2fsck-fix-indexed-dir-rehash-failure-with-metadata_.patch
+Patch7:		0007-libext2fs-retry-reading-superblock-on-open-when-chec.patch
+Patch8:		0008-libext2fs-fix-potential-buffer-overrun-in-__get_dire.patch
+Patch9:		0009-tune2fs-reset-MMP-state-on-error-exit.patch
+Patch10:	0010-e2fsck-use-size_t-instead-of-int-in-string_copy.patch
+Patch11:	0011-libext2fs-fix-incorrect-negative-error-return-in-uni.patch
+Patch12:	0012-debugfs-fix-double-free-in-realloc-error-path-in-rea.patch
+Patch13:	0013-tune2fs-fix-resource-leak-in-handle_quota_options.patch
+Patch14:	0014-libext2fs-fix-UBSAN-warning-in-ext2fs_mmp_new_seq.patch
+Patch15:	0015-libext2fs-fix-segault-when-setting-an-xattr-with-an-.patch
+Patch16:	0016-mke2fs-fix-a-importing-a-directory-with-an-ACL-and-i.patch
+Patch17:	0017-mke2fs-fix-resource-leak-on-error-path-when-creating.patch
+Patch18:	0018-libext2fs-fix-incorrect-error-code-return-in-ext2fs_.patch
+Patch19:	0019-debugfs-fix-memory-allocation-failures-when-parsing-.patch
+Patch20:	0020-debugfs-fix-logdump-on-file-systems-with-block-sizes.patch
+Patch21:	0021-libext2fs-fix-crash-when-ext2fs_mmp_stop-is-called-b.patch
+Patch22:	0022-debugfs-fix-dump_metadata_block-for-block-sizes-8192.patch
+Patch23:	0023-debugfs-fix-memory-leak-problem-in-read_list.patch
+Patch24:	0024-debugfs-fix-rdump-and-ls-to-handle-uids-and-gids-655.patch
+Patch25:	0025-e2image-fix-overflow-in-l2-table-processing.patch
+Patch26:	0026-e2fsck-fix-last-mount-write-time-when-e2fsck-is-forc.patch
+Patch27:	0027-profile_create_node-set-magic-before-strdup-name-to-.patch
+Patch28:	0028-tdb_transaction_recover-fix-memory-leak.patch
+Patch29:	0029-zap_sector-fix-memory-leak.patch
+Patch30:	0030-misc-fix-potential-segmentation-fault-problem-in-sca.patch
+Patch31:	0031-ext2ed-fix-potential-NULL-pointer-dereference-in-dup.patch
+Patch32:	0032-ss_add_info_dir-fix-error-handling-when-memory-alloc.patch
+Patch33:	0033-ss_create_invocation-fix-error-handling-when-memory-.patch
+Patch34:	0034-ss_create_invocation-fix-potential-unititalized-refe.patch
+Patch35:	0035-libext2fs-fix-unexpected-NULL-variable.patch
+Patch36:	0036-libsupport-fix-potental-NULL-pointer-dereferences-in.patch
+Patch37:	0037-libext2fs-fix-coverity-nits-in-tdb.c.patch
 
 BuildRequires:  gcc pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
-Recommends:     %{name}-help = %{version}-%{release}
+BuildRequires:  audit
+Recommends:	%{name}-help = %{version}-%{release}
 
 Provides:       e2fsprogs-libs%{?_isa} e2fsprogs-libs
 Obsoletes:      e2fsprogs-libs
@@ -130,6 +165,15 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Mon Nov 15 2021 zhanchengbin <zhanchengbin1@huawei.com> - 1.45.6-7
+- DESC: integrate community patches.
+
+* Sun Sep 13 2021 lixiaokeng <lixiaokeng@huawei.com> - 1.45.6-6
+- DESC: add newer libreadline.so.8 to dlopen path
+
+* Fri Aug 20 2021 chenyanpanHW <chenyanpan@huawei.com> - 1.45.6-5
+- DESC: add necessary BuildRequires audit
+
 * Thu Aug 05 2021 wuguanghao<wuguanghao3@huawei.com> - 1.45.6-4
 - DESC: delete -Sgit from %autosetup, and delete BuildRequire git
 

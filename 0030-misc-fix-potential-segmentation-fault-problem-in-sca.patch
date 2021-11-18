@@ -1,0 +1,32 @@
+From f9033bd2e82c6f5963034cd59f7273770374b598 Mon Sep 17 00:00:00 2001
+From: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Date: Wed, 30 Jun 2021 16:27:20 +0800
+Subject: [PATCH] misc: fix potential segmentation fault problem in scandir()
+
+In scandir(), temp_list[num_dent] is allocated by calling
+malloc(), we should check whether malloc() returns NULL before
+accessing temp_list[num_dent].
+
+Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Signed-off-by: Wu Guanghao <wuguanghao3@huawei.com>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ misc/create_inode.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/misc/create_inode.c b/misc/create_inode.c
+index d62e1cb4..c00d5458 100644
+--- a/misc/create_inode.c
++++ b/misc/create_inode.c
+@@ -771,6 +771,8 @@ static int scandir(const char *dir_name, struct dirent ***name_list,
+ 		}
+ 		// add the copy of dirent to the list
+ 		temp_list[num_dent] = (struct dirent*)malloc((dent->d_reclen + 3) & ~3);
++		if (!temp_list[num_dent])
++			goto out;
+ 		memcpy(temp_list[num_dent], dent, dent->d_reclen);
+ 		num_dent++;
+ 	}
+-- 
+2.25.1
+

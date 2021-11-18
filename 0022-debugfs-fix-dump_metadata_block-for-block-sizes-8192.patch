@@ -1,0 +1,26 @@
+From ea82add307c4bc820423abc8acc2f155720cf914 Mon Sep 17 00:00:00 2001
+From: Theodore Ts'o <tytso@mit.edu>
+Date: Tue, 16 Feb 2021 00:30:24 -0500
+Subject: [PATCH] debugfs: fix dump_metadata_block() for block sizes > 8192
+
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ debugfs/logdump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/debugfs/logdump.c b/debugfs/logdump.c
+index ea01db7a..3181e6fa 100644
+--- a/debugfs/logdump.c
++++ b/debugfs/logdump.c
+@@ -771,7 +771,7 @@ static void dump_metadata_block(FILE *out_file, struct journal_source *source,
+ 				tid_t transaction)
+ {
+ 	int		retval;
+-	char 		buf[8192];
++	char 		buf[EXT2_MAX_BLOCK_SIZE];
+ 
+ 	if (!(dump_all
+ 	      || (fs_blocknr == block_to_dump)
+-- 
+2.25.1
+
