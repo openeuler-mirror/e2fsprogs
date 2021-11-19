@@ -1,0 +1,36 @@
+From f11448318f99aa5fde27aea6b73420d6c495a4f6 Mon Sep 17 00:00:00 2001
+From: Artem Blagodarenko <artem.blagodarenko@gmail.com>
+Date: Thu, 22 Apr 2021 01:24:48 -0400
+Subject: [PATCH] e2image: fix overflow in l2 table processing
+
+For a large partition during e2image capture process
+it is possible to overflow offset at multiply operation.
+This leads to the situation when data is written to the
+position at the start of the image instead of the image end.
+
+Let's use the right cast to avoid integer overflow.
+
+Signed-off-by: Alexey Lyashkov <c17817@cray.com>
+Signed-off-by: Artem Blagodarenko <c17828@cray.com>
+HPE-bug-id: LUS-9368
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+---
+ lib/ext2fs/qcow2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/ext2fs/qcow2.c b/lib/ext2fs/qcow2.c
+index ee701f7a..20824170 100644
+--- a/lib/ext2fs/qcow2.c
++++ b/lib/ext2fs/qcow2.c
+@@ -238,7 +238,7 @@ int qcow2_write_raw_image(int qcow2_fd, int raw_fd,
+ 			if (offset == 0)
+ 				continue;
+ 
+-			off_out = (l1_index * img.l2_size) +
++			off_out = ((__u64)l1_index * img.l2_size) +
+ 				  l2_index;
+ 			off_out <<= img.cluster_bits;
+ 			ret = qcow2_copy_data(qcow2_fd, raw_fd, offset,
+-- 
+2.25.1
+
