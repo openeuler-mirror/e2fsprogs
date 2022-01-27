@@ -1,8 +1,8 @@
 Name:           e2fsprogs
 Version:        1.46.4
-Release:        1
+Release:        2
 Summary:        Second extended file system management tools
-License:        GPLv2 and LGPLv2 and MIT
+License:        GPLv2+ and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 
@@ -131,6 +131,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Thu Jan 27 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-2
+- replace License in spec
+
 * Sat Nov 27 2021 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-1
 - update package to v1.46.4.
 
