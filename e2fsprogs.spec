@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.45.6
-Release:        7
+Release:        8
 Summary:        Second extended file system management tools
 License:        GPLv2 and LGPLv2 and GPLv2+
 URL:            http://e2fsprogs.sourceforge.net/
@@ -44,6 +44,9 @@ Patch34:	0034-ss_create_invocation-fix-potential-unititalized-refe.patch
 Patch35:	0035-libext2fs-fix-unexpected-NULL-variable.patch
 Patch36:	0036-libsupport-fix-potental-NULL-pointer-dereferences-in.patch
 Patch37:	0037-libext2fs-fix-coverity-nits-in-tdb.c.patch
+Patch38:	0038-e2fsck-exit-journal-recovery-when-find-EIO-ENOMEM-er.patch
+Patch39:	0039-e2fsck-exit-journal-recovery-when-jounral-superblock.patch
+Patch40:	0040-e2fsck-add-env-param-E2FS_UNRELIABLE_IO-to-fi.patch
 
 BuildRequires:  gcc pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
@@ -165,6 +168,15 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Sun Jan 30 2021 Zhiqiang Liu <liuzhiqiang26@huawei.com> - 1.45.6-8
+- DESC: fix three issues:
+  - e2fsck: exit journal recovery when find EIO, ENOMEM errors
+    Fix issue: https://gitee.com/src-openeuler/e2fsprogs/issues/I4RZUT?from=project-issue
+  - e2fsck: exit journal recovery when jounral superblock fails to update
+    Fix issue: https://gitee.com/src-openeuler/e2fsprogs/issues/I4S0SD?from=project-issue
+  - e2fsck: add env param E2FS_UNRELIABLE_IO to fix unreliable io case
+    Fix issue: https://gitee.com/src-openeuler/e2fsprogs/issues/I4RZVX?from=project-issue
+
 * Mon Nov 15 2021 zhanchengbin <zhanchengbin1@huawei.com> - 1.45.6-7
 - DESC: integrate community patches.
 
