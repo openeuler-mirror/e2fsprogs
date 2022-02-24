@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.46.4
-Release:        2
+Release:        3
 Summary:        Second extended file system management tools
 License:        GPLv2+ and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -10,6 +10,8 @@ Patch1:		0001-e2fsprogs-set-hugefile-from-4T-to-1T-in-hugefile-tes.patch
 Patch2:		0002-libss-add-newer-libreadline.so.8-to-dlopen-path.patch
 Patch3:		0003-tests-update-expect-files-for-f_mmp_garbage.patch
 Patch4:		0004-tests-update-expect-files-for-f_large_dir-and-f_larg.patch
+Patch5:		0005-resize2fs-resize2fs-disk-hardlinks-will-be-error.patch
+
 
 BuildRequires:  gcc pkgconfig texinfo
 BuildRequires:  fuse-devel libblkid-devel libuuid-devel
@@ -131,6 +133,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Thu Feb 24 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-3
+- resize2fs: resize2fs disk hardlinks will be error
+
 * Thu Jan 27 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-2
 - replace License in spec
 
