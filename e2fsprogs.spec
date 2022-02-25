@@ -11,6 +11,9 @@ Patch2:		0002-libss-add-newer-libreadline.so.8-to-dlopen-path.patch
 Patch3:		0003-tests-update-expect-files-for-f_mmp_garbage.patch
 Patch4:		0004-tests-update-expect-files-for-f_large_dir-and-f_larg.patch
 Patch5:		0005-resize2fs-resize2fs-disk-hardlinks-will-be-error.patch
+Patch6:		0006-e2fsck-exit-journal-recovery-when-find-EIO-ENOMEM-er.patch
+Patch7:		0007-e2fsck-exit-journal-recovery-when-jounral-superblock.patch
+Patch8:		0008-e2fsck-add-env-param-E2FS_UNRELIABLE_IO-to-fi.patch
 
 
 BuildRequires:  gcc pkgconfig texinfo
@@ -134,7 +137,7 @@ exit 0
 
 %changelog
 * Thu Feb 24 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-3
-- resize2fs: resize2fs disk hardlinks will be error
+- adapt patchs from openEuler-20.03-LTS
 
 * Thu Jan 27 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-2
 - replace License in spec
