@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.46.4
-Release:        3
+Release:        4
 Summary:        Second extended file system management tools
 License:        GPLv2+ and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -14,6 +14,7 @@ Patch5:		0005-resize2fs-resize2fs-disk-hardlinks-will-be-error.patch
 Patch6:		0006-e2fsck-exit-journal-recovery-when-find-EIO-ENOMEM-er.patch
 Patch7:		0007-e2fsck-exit-journal-recovery-when-jounral-superblock.patch
 Patch8:		0008-e2fsck-add-env-param-E2FS_UNRELIABLE_IO-to-fi.patch
+Patch9:		0009-e2mmpstatus.8.in-detele-filesystem-can-be-UUID-or-LA.patch		
 
 
 BuildRequires:  gcc pkgconfig texinfo
@@ -136,6 +137,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Wed Mar 2 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-4
+- e2mmpstatus.8.in: detele filesystem can be UUID or LABEL in manpage 
+
 * Thu Feb 24 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-3
 - adapt patchs from openEuler-20.03-LTS
 
