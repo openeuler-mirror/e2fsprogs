@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.46.4
-Release:        6
+Release:        7
 Summary:        Second extended file system management tools
 License:        GPLv2+ and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -17,6 +17,7 @@ Patch8:		0008-e2fsck-add-env-param-E2FS_UNRELIABLE_IO-to-fi.patch
 Patch9:		0009-e2mmpstatus.8.in-detele-filesystem-can-be-UUID-or-LA.patch		
 Patch10:	0010-tests-update-expect-file-for-u_direct_io.patch
 Patch11:	0011-libext2fs-don-t-old-the-CACHE_MTX-while-doing-I-O.patch
+Patch12:	0012-tests-add-warning-for-selinux-in-m_rootdir_acl.patch
 
 
 BuildRequires:  gcc pkgconfig texinfo
@@ -139,6 +140,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Wed Feb 16 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-7
+- tests: add warning for selinux in m_rootdir_acl
+
 * Wed Feb 9 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-6
 - libext2fs: don't old the CACHE_MTX while doing I/O
 
