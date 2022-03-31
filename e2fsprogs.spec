@@ -1,6 +1,6 @@
 Name:           e2fsprogs
 Version:        1.46.4
-Release:        7
+Release:        8
 Summary:        Second extended file system management tools
 License:        GPLv2+ and LGPLv2 and MIT
 URL:            http://e2fsprogs.sourceforge.net/
@@ -86,6 +86,9 @@ rm -f %{buildroot}/etc/cron.d/e2scrub_all
 rm -f %{buildroot}%{_libdir}/e2fsprogs/e2scrub_all_cron
 
 %check
+%ifarch riscv64
+rm -r tests/m_rootdir_acl
+%endif
 make fullcheck
 
 %ldconfig_scriptlets
@@ -140,6 +143,9 @@ exit 0
 %{_mandir}/man8/*
 
 %changelog
+* Thu Mar 31 2022 YukariChiba <i@0x7f.cc> - 1.46.4-8
+- Remove m_rootdir_acl test case when build in RISC-V to ignore unsupported operation
+
 * Thu Feb 17 2022 zhanchengbin <zhanchengbin1@huawei.com> - 1.46.4-7
 - tests: skip m_rootdir_acl if selinux is not disabled
 
